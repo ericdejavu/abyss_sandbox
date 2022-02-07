@@ -1,9 +1,7 @@
-package com.mygdx.game.input;
+package com.mygdx.game.handler.input;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.mygdx.game.input.impl.MouseDraggedHandler;
-import sun.security.jca.GetInstance;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

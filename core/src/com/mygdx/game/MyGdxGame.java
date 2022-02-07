@@ -1,18 +1,20 @@
 package com.mygdx.game;
 
+import box2dLight.ConeLight;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.game.input.InputAdapterHandler;
-import com.mygdx.game.input.impl.ExitGameHandler;
-import com.mygdx.game.input.impl.MouseDraggedHandler;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.handler.input.InputAdapterHandler;
+import com.mygdx.game.handler.input.impl.ExitGameHandler;
+import com.mygdx.game.handler.input.impl.MouseDraggedHandler;
 
 public class MyGdxGame extends ApplicationAdapter {
 	private final static int RAYS_PER_BALL = 128;
@@ -32,7 +34,6 @@ public class MyGdxGame extends ApplicationAdapter {
 	private World world;
 	private Box2DDebugRenderer renderer;
 
-	private PointLight pointLight;
 	private Body body;
 	private RayHandler rayHandler;
 
@@ -93,8 +94,17 @@ public class MyGdxGame extends ApplicationAdapter {
 		rayHandler = new RayHandler(world);
 		rayHandler.setAmbientLight(0f, 0f, 0f, 0.5f);
 		rayHandler.setBlurNum(3);
-		pointLight = new PointLight(rayHandler, RAYS_PER_BALL, null, LIGHT_DISTANCE, 0f, 0f);
+
+		Color weakColor = new Color(0.2f,0.2f,0.2f,1f);
+
+        PointLight pointLight = new PointLight(rayHandler, RAYS_PER_BALL, weakColor, LIGHT_DISTANCE, 0f, 0f);
 		pointLight.attachToBody(body,0,0);
+
+        ConeLight coneLight1 = new ConeLight(rayHandler, RAYS_PER_BALL, null, LIGHT_DISTANCE * 4, 0, 0, 0f, 15f);
+        coneLight1.attachToBody(body,0,0);
+
+        ConeLight coneLight2 = new ConeLight(rayHandler, RAYS_PER_BALL, weakColor, LIGHT_DISTANCE * 4, 0, 0, 0f, 60f);
+        coneLight2.attachToBody(body,0,0);
 	}
 
 	@Override
@@ -105,8 +115,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		boolean stepped = step(Gdx.graphics.getDeltaTime());
 
-		Gdx.gl.glClearColor(0.3f, 0.3f, 0.3f, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        ScreenUtils.clear(0.3f, 0.3f, 0.3f, 1);
 
 		float halfWidth = Gdx.graphics.getWidth() / 2f;
 		spriteBatch.setProjectionMatrix(camera.combined);
